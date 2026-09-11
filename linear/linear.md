@@ -19,6 +19,8 @@ For all Linear operations:
 
 - Keep comments explanatory and concise.
 - When linking files, follow the rules in `$HOME/Documents/skills/linking.md`.
+- Pass data in cli arguments as with `--description` only when the description is very short.
+Otherwise create a temporary file and use options like `--description-file`
 
 ## Reporting Rules
 
