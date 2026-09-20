@@ -80,6 +80,32 @@ filesystem-root option and pass the common anchor for every relative lesson
 path. A lesson may draw from multiple repositories, but files owned by different
 repositories belong in separate Git diff blocks.
 
+Do not assume that an untracked file cannot appear in a lesson just because
+ordinary `git diff` omits it. For a Git diff source whose target is `worktree`,
+`learnc` treats every path in `files` as an explicit selection. If a selected
+path is an untracked, non-ignored regular file, `learnc` synthesizes a diff that
+shows the entire file as a new addition:
+
+```json
+{
+  "type": "diff",
+  "id": "new-document",
+  "source": {
+    "kind": "git",
+    "base": "HEAD",
+    "target": { "kind": "worktree" },
+    "files": [{ "path": "docs/new-document.md" }],
+    "context_lines": 3
+  }
+}
+```
+
+This support is limited to explicitly selected worktree files. Ignored files,
+non-regular files, and files outside an owning Git repository are rejected; an
+untracked file also cannot appear in a revision-to-revision comparison. Let
+`learnc check` determine whether the selected path is valid instead of inferring
+failure from ordinary Git behavior.
+
 After a successful check, use `learnc build` to create the `.learn` artifact.
 Consult command help for the current argument order and output-path option rather
 than assuming them. Report the authored JSON path and generated artifact path to
